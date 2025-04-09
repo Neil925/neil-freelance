@@ -1,103 +1,95 @@
-import Image from "next/image";
+import Section from "@/components/section";
+import placeholder from "../resources/images/placeholder.png";
+import { Mail, Smartphone } from "@deemlol/next-icons";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+    <main className="">
+      <div className="flex space-x-5 p-10 md:min-h-screen ">
+        <div className="space-y-10 w-fit h-fit lg:text-4xl/12 text-2xl">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold">
+            Neil Freelancing
+          </h1>
+          <p className="">
+            Here for web development and general IT support.
+          </p>
+          <p className="">
+            My full name is Neil Elkadi. I am a Software and Computing
+            Technologies student at Valencia College and I’m looking to build
+            some experience and make a bit of money where I can. If you’re in
+            need of technological support at a reasonable price then I am your
+            guy!
+          </p>
+          <a href="ticket">
+            <button className="md:p-5 md:text-4xl p-2 text-xl bg-primary rounded-md mt-5">
+              Make a Ticket
+            </button>
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+        <div className="flex justify-end align-top md:w-2/5 collapse h-0 w-0 md:h-fit md:visible object-top">
+          <img
+            src="https://neilelkadi.com/static/media/About.c0cec9c1cc1c4053784d.jpg"
+            alt="profile"
+            className="w-full h-fit object-contain rounded-md"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        </div>
+      </div>
+      <Section
+        title="Need Website Development?"
+        img={placeholder}
+        order={0}
+        buttonContent="Make a Web Development Ticket"
+        buttonUrl="ticket?job-type=WebDevelopment"
+        style="bg-bg-contrast"
+      >
+        I’ve been making websites for fun, academics, and work for about 6 years
+        now. Whether you need a large scale panel to help your business with
+        automation or a simple landing page to bring customers in like the one
+        you see before you, I can do it no problem.
+      </Section>
+      <Section
+        title="Need IT Support?"
+        img={placeholder}
+        order={1}
+        buttonContent="Make an IT Support Ticket"
+        buttonUrl="ticket?job-type=ITSupport"
+        style="bg-none"
+      >
+        Building a new desktop and need help? Worried about your system being
+        slow? Got hardware you can’t figure out how to get working? Any
+        technological problem you can think of, just get in touch and I’ll see
+        what I can do!
+      </Section>
+      <Section
+        title="Something else?"
+        img={placeholder}
+        order={0}
+        buttonContent="Make a Ticket"
+        buttonUrl="ticket?job-type=Other"
+        style="bg-bg-contrast"
+      >
+        Don’t worry if you’re not sure whether your problem falls in my
+        knowledge area or not. Simply reach out to me describing what you need
+        and I’ll do my best to get you in the right direction.
+      </Section>
+      <footer className="w-full text-center flex flex-col items-center justify-center space-y-7 p-5">
+        <h2 className="lg:text-5xl text-4xl font-bold ">
+          Contact Me Directly
+        </h2>
+        <p className="opacity-75 lg:text-xl text-md">
+          If you are in a rush or just can’t submit a ticket, feel free to reach
+          me through these means
+        </p>
+        <div className="flex w-full items-center justify-center flex-col text-xl">
+          <div className="flex items-center space-x-1">
+            <Smartphone size={24} color="#000000" /> <span>(407) 364-5700</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Mail size={24} color="#000000" />
+            <span>elkadineil@gmail.com</span>
+          </div>
+        </div>
       </footer>
-    </div>
+    </main>
   );
 }
