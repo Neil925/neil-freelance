@@ -1,6 +1,7 @@
 import Section from "@/components/section";
 import placeholder from "../resources/images/placeholder.png";
 import { Mail, Smartphone } from "@deemlol/next-icons";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -27,7 +28,7 @@ export default function Home() {
           </a>
         </div>
         <div className="flex justify-end align-top md:w-2/5 collapse h-0 w-0 md:h-fit md:visible object-top">
-          <img
+          <Image
             src="https://neilelkadi.com/static/media/About.c0cec9c1cc1c4053784d.jpg"
             alt="profile"
             className="w-full h-fit object-contain rounded-md"

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Neil Freelance - Ticket",
@@ -11,8 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>
+    <Suspense fallback={<div>Loading...</div>}>
       {children}
-    </div>
+    </Suspense>
   );
 }

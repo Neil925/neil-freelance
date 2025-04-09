@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { submitForm } from "./action";
 
 export default function Ticket() {
