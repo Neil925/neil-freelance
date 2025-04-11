@@ -9,6 +9,12 @@ type FormDataValues = {
 };
 
 export async function submitForm(formData: FormData) {
+  if (process.env.WEBHOOK_URL == undefined) {
+    return { success: false, message: "No webhook URL found." };
+  }
+
+  let webhook: string = process.env.WEBHOOK_URL;
+
   const data: FormDataValues = {
     name: formData.get("name") as string,
     email: formData.get("email") as string,
@@ -36,7 +42,7 @@ export async function submitForm(formData: FormData) {
 
   try {
     const res = await fetch(
-      "https://discord.com/api/webhooks/1359626874036420618/k-UEmpbYKpgfajoDfgS0D5MrNUgNs8-Ky-P0LBGVAetqloroTlc2gPEj75S13TRAKguZ",
+      webhook,
       {
         method: "POST",
         headers: {
