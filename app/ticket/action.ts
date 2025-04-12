@@ -13,7 +13,7 @@ export async function submitForm(formData: FormData) {
     return { success: false, message: "No webhook URL found." };
   }
 
-  let webhook: string = process.env.WEBHOOK_URL;
+  const webhook: string = process.env.WEBHOOK_URL;
 
   const data: FormDataValues = {
     name: formData.get("name") as string,

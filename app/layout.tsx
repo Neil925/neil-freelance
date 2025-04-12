@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Noto_Sans, Noto_Sans_Mono } from "next/font/google";
 import "./globals.css";
+import Image from "next/image";
+
+import pattern_bg from "../resources/images/pattern-bg.png";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -28,11 +31,12 @@ export default function RootLayout({
       <body
         className={`${notoSans.variable} ${sansMono.variable} bg-background antialiased`}
       >
+        <Image src={pattern_bg} alt="" className="fixed h-screen z-[-2]" />
         <svg
-          className="absolute right-0 h-32 md:h-[92%] z-[-1]"
+          className="absolute right-0 w-1/3 sm:w-[50%] z-[-1]"
           viewBox="0 0 100 100"
         >
-          <polygon points="100,100 100,0 0,0" fill="#60A5FA" />
+          <polygon points="100,64 100,0 0,0" fill="#60A5FA" />
         </svg>
         {children}
       </body>

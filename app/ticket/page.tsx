@@ -7,11 +7,16 @@ export default function Ticket() {
   const searchParams = useSearchParams();
 
   const [message, setMessage] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (x: FormData) => {
     const res = await submitForm(x);
-    if (!res.success) {
-      setMessage(res.message);
+
+    setMessage(res.message);
+    setSuccess(res.success);
+
+    if (res.success) {
+      setTimeout(() => setMessage(""), 5000);
     }
   };
 
@@ -26,8 +31,13 @@ export default function Ticket() {
       </div>
       {message !== "" &&
         (
-          <p className="text-red-700 font-bold text-center">
-            Error: {message}
+          <p
+            className={`${
+              success ? "text-green-700" : "text-red-700"
+            } font-bold text-center text-2xl`}
+          >
+            {success ? "" : "Error: "}
+            {message}
           </p>
         )}
       <form
@@ -41,6 +51,7 @@ export default function Ticket() {
             className="border-1 rounded-sm bg-white p-[3px]"
             type="text"
             name="name"
+            required
           />
         </div>
 
@@ -50,6 +61,7 @@ export default function Ticket() {
             className="border-1 rounded-sm bg-white p-[3px]"
             type="email"
             name="email"
+            required
           />
         </div>
 
@@ -59,6 +71,7 @@ export default function Ticket() {
             className="border-1 rounded-sm bg-white p-[3px]"
             type="text"
             name="phone"
+            required
           />
         </div>
 
@@ -69,9 +82,12 @@ export default function Ticket() {
             name="job-type"
             id="job-type"
             defaultValue={searchParams.get("job-type") ?? ""}
+            required
           >
-            <option value={"WebDevelopment"}>Web Development</option>
+            <option value="" disabled>--</option>
             <option value={"ITSupport"}>IT Support</option>
+            <option value={"WebDevelopment"}>Web Development</option>
+            <option value={"SoftwareDevelopment"}>Software Development</option>
             <option value={"Other"}>Other</option>
           </select>
         </div>
@@ -81,6 +97,7 @@ export default function Ticket() {
           <textarea
             className="border-1 rounded-sm bg-white h-24 p-[3px]"
             name="description"
+            required
           />
         </div>
 
