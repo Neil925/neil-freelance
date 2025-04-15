@@ -41,7 +41,7 @@ export default function Ticket() {
           </p>
         )}
       <form
-        className="lg:w-1/3 w-full flex flex-col mx-auto border-1 bg-bg-contrast p-2 drop-shadow-sm
+        className="lg:w-1/3 w-full flex flex-col mx-auto border-1 bg-primary-tr p-2 drop-shadow-sm
         space-y-5"
         action={handleSubmit}
       >

@@ -10,8 +10,11 @@ export default function Home() {
       <div className="flex space-x-5 p-10">
         <div className="space-y-10 w-fit h-fit lg:text-4xl/12 text-2xl">
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold">
-            Neil Freelancing
+            Neil Elkadi
           </h1>
+          <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold text-text-dark">
+            Tech Freelancing
+          </h2>
           <p className="">
             Here for web development and general IT support.
           </p>
@@ -42,7 +45,7 @@ export default function Home() {
         order={0}
         buttonContent="Make an IT Support Ticket"
         buttonUrl="ticket?job-type=ITSupport"
-        style="bg-bg-contrast"
+        style="bg-primary-tr"
       >
         Building a new desktop and need help? Worried about your system being
         slow? Got hardware you can’t figure out how to get working? Any
@@ -68,7 +71,7 @@ export default function Home() {
         order={0}
         buttonContent="Make a Software Ticket"
         buttonUrl="ticket?job-type=SoftwareDevelopment"
-        style="bg-bg-contrast"
+        style="bg-primary-tr"
       >
         {"If it's general purpose software, I've got that covered as well! Whether\
         it's a bot for you favorite platform, a script to organize some data you\
@@ -87,7 +90,7 @@ export default function Home() {
         knowledge area or not. Simply reach out to me describing what you need
         and I’ll do my best to get you in the right direction.
       </Section>
-      <footer className="w-full text-center flex flex-col items-center justify-center space-y-7 p-5 bg-bg-contrast-primary">
+      <footer className="w-full text-center flex flex-col items-center justify-center space-y-7 p-5 bg-primary">
         <h2 className="lg:text-5xl text-4xl font-bold ">
           Contact Me Directly
         </h2>
