@@ -4,6 +4,11 @@ import profile from "../resources/images/profile.png";
 import { Mail, Smartphone } from "@deemlol/next-icons";
 import Image from "next/image";
 
+import itsupport from "../resources/images/sections/itsupport.png";
+import webdev from "../resources/images/sections/webdev.png";
+import software from "../resources/images/sections/software.png";
+import other from "../resources/images/sections/other.png";
+
 export default function Home() {
   return (
     <main className="">
@@ -41,7 +46,7 @@ export default function Home() {
       </div>
       <Section
         title="Need IT Support?"
-        img={placeholder}
+        img={itsupport}
         order={0}
         buttonContent="Make an IT Support Ticket"
         buttonUrl="ticket?job-type=ITSupport"
@@ -54,7 +59,7 @@ export default function Home() {
       </Section>
       <Section
         title="Need Website Development?"
-        img={placeholder}
+        img={webdev}
         order={1}
         buttonContent="Make a Web Development Ticket"
         buttonUrl="ticket?job-type=WebDevelopment"
@@ -67,7 +72,7 @@ export default function Home() {
       </Section>
       <Section
         title="Need Software Development?"
-        img={placeholder}
+        img={software}
         order={0}
         buttonContent="Make a Software Ticket"
         buttonUrl="ticket?job-type=SoftwareDevelopment"
@@ -80,7 +85,7 @@ export default function Home() {
       </Section>
       <Section
         title="Something else?"
-        img={placeholder}
+        img={other}
         order={1}
         buttonContent="Make a Ticket"
         buttonUrl="ticket?job-type=Other"
