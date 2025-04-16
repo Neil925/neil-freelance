@@ -1,5 +1,4 @@
 import Section from "@/components/section";
-import placeholder from "../resources/images/placeholder.png";
 import profile from "../resources/images/profile.png";
 import { Mail, Smartphone } from "@deemlol/next-icons";
 import Image from "next/image";
