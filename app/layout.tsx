@@ -22,16 +22,19 @@ export const metadata: Metadata = {
     "Get in touch with me for web development or general IT support.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout(
+  { children }: Readonly<{ children: React.ReactNode }>,
+) {
   return (
     <html lang="en">
       <body
         className={`${notoSans.variable} ${sansMono.variable} bg-gradient-to-br from-bg-start to-bg-end antialiased relative min-h-screen`}
       >
+        <a href="admin">
+          <button className="absolute bottom-5 right-5 bg-red-500 cursor-pointer opacity-0">
+            admin
+          </button>
+        </a>
         <div className="absolute top-0 left-0 z-[-5] h-full w-full overflow-clip">
           <svg
             className="absolute right-0 w-1/3 sm:w-[50%] z-[-1] opacity-50"

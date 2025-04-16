@@ -32,9 +32,8 @@ export default function Ticket() {
       {message !== "" &&
         (
           <p
-            className={`${
-              success ? "text-green-700" : "text-red-700"
-            } font-bold text-center text-2xl`}
+            className={`${success ? "text-green-700" : "text-red-700"
+              } font-bold text-center text-2xl`}
           >
             {success ? "" : "Error: "}
             {message}
