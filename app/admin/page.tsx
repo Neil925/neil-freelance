@@ -1,8 +1,9 @@
 import React from "react";
-import prisma from "@/lib/prisma";
+import { Edit, Trash2 } from "@deemlol/next-icons";
+import { prisma } from "@/lib/prisma";
 
 export default async function Admin() {
-  let tickets = await prisma.tickets.findMany({
+  const tickets = await prisma.tickets.findMany({
     orderBy: { created_at: "desc" },
   });
 
@@ -46,9 +47,16 @@ export default async function Admin() {
                   {ticket.created_at.toLocaleDateString()}
                 </td>
                 <td className="border-r-2 border-black p-2">
-                  Not Yet Implemented
+                  {ticket.status}
                 </td>
-                <td className="p-2">Not Yet Implemented</td>
+                <td className="p-2 flex space-x-2 justify-center">
+                  <button className="cursor-pointer">
+                    <Edit />
+                  </button>
+                  <button>
+                    <Trash2 className="cursor-pointer" />
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

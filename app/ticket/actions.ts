@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export async function submitForm(formData: FormData) {
   if (process.env.WEBHOOK_URL == undefined) {

@@ -1,12 +1,12 @@
-import Section from "@/components/section";
 import profile from "../resources/images/profile.png";
-import { Mail, Smartphone } from "@deemlol/next-icons";
 import Image from "next/image";
 
 import itsupport from "../resources/images/sections/itsupport.png";
 import webdev from "../resources/images/sections/webdev.png";
 import software from "../resources/images/sections/software.png";
 import other from "../resources/images/sections/other.png";
+import Section from "./components/section";
+import Footer from "./components/footer";
 
 export default function Home() {
   return (
@@ -94,25 +94,7 @@ export default function Home() {
         knowledge area or not. Simply reach out to me describing what you need
         and I’ll do my best to get you in the right direction.
       </Section>
-      <footer className="w-full text-center flex flex-col items-center justify-center space-y-7 p-5 bg-primary">
-        <h2 className="lg:text-5xl text-4xl font-bold ">
-          Contact Me Directly
-        </h2>
-        <p className="opacity-80 lg:text-xl text-md">
-          If you are in a rush or just can’t submit a ticket, feel free to reach
-          me through these means
-        </p>
-        <div className="flex w-full items-center justify-center flex-col text-xl">
-          <div className="flex items-center space-x-1">
-            <Smartphone size={24} color="#000000" />
-            <span>(407) 364-5700</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <Mail size={24} color="#000000" />
-            <span>elkadineil@gmail.com</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

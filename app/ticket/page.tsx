@@ -1,9 +1,12 @@
 "use client";
+
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { submitForm } from "./action";
+import { submitForm } from "./actions";
+import { useSession } from "next-auth/react";
 
 export default function Ticket() {
+  const { data: session } = useSession();
   const searchParams = useSearchParams();
 
   const [message, setMessage] = useState("");
@@ -19,6 +22,19 @@ export default function Ticket() {
       setTimeout(() => setMessage(""), 5000);
     }
   };
+
+  if (!session) {
+    return (
+      <div>
+        <h1>
+          No session found.
+          <br />
+          {JSON.stringify(session)}
+        </h1>
+        <a href="api/guestsignin">Attempt sign in route.</a>
+      </div>
+    );
+  }
 
   return (
     <div className="p-5 flex justify-center flex-col space-y-8">
@@ -101,7 +117,7 @@ export default function Ticket() {
         </div>
 
         <div className="w-full flex justify-end ">
-          <button className="w-fit p-2 border-1 bg-primary rounded text-lg font-bold">
+          <button className="w-fit p-2 border-1 bg-primary rounded text-lg font-bold cursor-pointer">
             Submit Ticket
           </button>
         </div>
