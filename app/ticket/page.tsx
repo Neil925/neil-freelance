@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { submitForm } from "./actions";
 import { useSession } from "next-auth/react";
+import logger from "@/utils/logger";
 
 export default function Ticket() {
   const { data: session } = useSession();
@@ -24,6 +25,11 @@ export default function Ticket() {
   };
 
   if (!session) {
+    logger.warn(
+      { user: null, action: "Failed Access" },
+      "User attempted to access a resource.",
+    );
+
     return (
       <div>
         <h1>

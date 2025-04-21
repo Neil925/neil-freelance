@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import logger from "@/utils/logger";
 
 export async function submitForm(formData: FormData) {
   if (process.env.WEBHOOK_URL == undefined) {
@@ -22,7 +23,7 @@ export async function submitForm(formData: FormData) {
       },
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return { success: false, message: "Error with database connection." };
   }
 
@@ -57,13 +58,13 @@ export async function submitForm(formData: FormData) {
     );
 
     if (!res.ok) {
-      console.error("Failed to send to Discord:", await res.text());
+      logger.error("Failed to send to Discord:", await res.text());
       throw new Error("Discord webhook failed");
     }
 
     return { success: true, message: "Submitted successfully" };
   } catch (err) {
-    console.error("Webhook error:", err);
+    logger.error("Webhook error:", err);
     return { success: false, message: "Something went wrong" };
   }
 }

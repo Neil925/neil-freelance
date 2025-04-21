@@ -2,6 +2,7 @@ import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import { prisma } from "./prisma";
+import logger from "@/utils/logger";
 
 declare module "next-auth" {
   interface Session {
@@ -25,6 +26,10 @@ export const { signIn, signOut, handlers, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials.username || !credentials.password) {
+          logger.info(
+            { user: "Guest", action: "creation" },
+            "New guest account being created.",
+          );
           return { id: "TestID", name: "Test Name", role: "Test role" };
         }
 
@@ -61,8 +66,8 @@ export const { signIn, signOut, handlers, auth } = NextAuth({
       return token;
     },
     session({ session, user }) {
-      console.log("Session is: ");
-      console.log(session);
+      logger.debug("Session is: ");
+      logger.debug(session);
       if (session.user) {
         session.user.role = user?.role;
       }
