@@ -3,8 +3,8 @@ pipeline {
 
     environment {
       WEBHOOK_URL   = credentials('freelance-webook')
-      DATABASE_URL  = credentials('freelance-database-url')
-      AUTH_SECRET   = credentials('freelance-auth-secret')
+        DATABASE_URL  = credentials('freelance-database-url')
+        AUTH_SECRET   = credentials('freelance-auth-secret')
     }
 
   stages {
@@ -26,17 +26,30 @@ pipeline {
       }
     }
 
-
     stage('Build') {
       steps {
         sh 'npm run build'
       }
     }
 
-    stage('Deploy') {
+    stage('Build Image') {
       steps {
-        sh 'npm run start'
+        sh 'docker build -t my-nextjs-app .'
       }
+    }
+
+    stage('Run Container') {
+      steps {
+        sh 'docker stop nextjs-app || true && docker rm nextjs-app || true'
+          sh '''
+          docker run -d \
+          -p 3000:3000 \
+          --name nextjs-app \
+          -e DATABASE_URL=$DATABASE_URL \
+          -e AUTH_SECRET=$AUTH_SECRET \
+          -e WEBHOOK_URL=$WEBHOOK_URL \
+          my-nextjs-app
+          '''      }
     }
   }
 
