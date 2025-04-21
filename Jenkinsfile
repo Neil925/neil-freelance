@@ -45,7 +45,7 @@ pipeline {
           docker run -d \
           -p 3000:3000 \
           --name freelance-app \
-          --network=elk \
+          --network elk \
           -e DATABASE_URL=$DATABASE_URL \
           -e AUTH_SECRET=$AUTH_SECRET \
           -e WEBHOOK_URL=$WEBHOOK_URL \
