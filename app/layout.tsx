@@ -31,7 +31,7 @@ export default function RootLayout(
         className={`${notoSans.variable} ${sansMono.variable} bg-gradient-to-br from-bg-start to-bg-end antialiased relative min-h-screen`}
       >
         <a href="admin">
-          <button className="absolute bottom-5 right-5 bg-red-500 cursor-pointer opacity-0">
+          <button className="absolute bottom-5 left-5 bg-red-500 cursor-pointer opacity-0">
             admin
           </button>
         </a>
