@@ -34,7 +34,7 @@ pipeline {
 
     stage('Build Image') {
       steps {
-        sh 'docker build -t my-nextjs-app .'
+        sh 'docker build -t freelance-app .'
       }
     }
 
@@ -45,10 +45,11 @@ pipeline {
           docker run -d \
           -p 3000:3000 \
           --name nextjs-app \
+	  --network=host \
           -e DATABASE_URL=$DATABASE_URL \
           -e AUTH_SECRET=$AUTH_SECRET \
           -e WEBHOOK_URL=$WEBHOOK_URL \
-          my-nextjs-app
+          freelance-app
           '''      }
     }
   }
