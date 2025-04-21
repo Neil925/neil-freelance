@@ -3,11 +3,11 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { submitForm } from "./actions";
-import { useSession } from "next-auth/react";
-import logger from "@/utils/logger";
+// import { useSession } from "next-auth/react";
+// import logger from "@/utils/logger";
 
 export default function Ticket() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const searchParams = useSearchParams();
 
   const [message, setMessage] = useState("");
@@ -24,23 +24,23 @@ export default function Ticket() {
     }
   };
 
-  if (!session) {
-    logger.warn(
-      { user: null, action: "Failed Access" },
-      "User attempted to access a resource.",
-    );
-
-    return (
-      <div>
-        <h1>
-          No session found.
-          <br />
-          {JSON.stringify(session)}
-        </h1>
-        <a href="api/guestsignin">Attempt sign in route.</a>
-      </div>
-    );
-  }
+  // if (!session) {
+  //   logger.warn(
+  //     { user: null, action: "Failed Access" },
+  //     "User attempted to access a resource.",
+  //   );
+  //
+  //   return (
+  //     <div>
+  //       <h1>
+  //         No session found.
+  //         <br />
+  //         {JSON.stringify(session)}
+  //       </h1>
+  //       <a href="api/guestsignin">Attempt sign in route.</a>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="p-5 flex justify-center flex-col space-y-8">
