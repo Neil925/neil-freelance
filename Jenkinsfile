@@ -40,12 +40,12 @@ pipeline {
 
     stage('Run Container') {
       steps {
-        sh 'docker stop nextjs-app || true && docker rm nextjs-app || true'
+        sh 'docker stop freelance-app || true && docker rm freelance-app || true'
           sh '''
           docker run -d \
           -p 3000:3000 \
-          --name nextjs-app \
-	  --network=host \
+          --name freelance-app \
+          --network=host \
           -e DATABASE_URL=$DATABASE_URL \
           -e AUTH_SECRET=$AUTH_SECRET \
           -e WEBHOOK_URL=$WEBHOOK_URL \
