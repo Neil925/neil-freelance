@@ -8,13 +8,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model sessions {
   session_id String   @id @db.VarChar(255)
   user_id    Int?
-  created_at DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
-
-  @@ignore
+  expires    DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
 }
 
 model tickets {
