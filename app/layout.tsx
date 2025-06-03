@@ -5,7 +5,6 @@ import Image from "next/image";
 
 import wifi from "../resources/images/icons/wifi.png";
 import code from "../resources/images/icons/code.png";
-import logger from "@/utils/logger";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -26,11 +25,6 @@ export const metadata: Metadata = {
 export default function RootLayout(
   { children }: Readonly<{ children: React.ReactNode }>,
 ) {
-  logger.info(
-    { user: null, action: "Landed" },
-    "Someone has just accessed the site.",
-  );
-
   return (
     <html lang="en">
       <body

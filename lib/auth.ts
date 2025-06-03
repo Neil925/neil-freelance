@@ -1,20 +1,53 @@
 import bcrypt from "bcryptjs";
+import {
+  createSession,
+  generateSessionToken,
+  invalidateSession,
+  validateSession,
+} from "./session";
 import prisma from "./prisma";
-import { createSession, generateSessionToken } from "./session";
+import { redirect } from "next/navigation";
+import {
+  deleteSessionTokenCookie,
+  getSessionTokenFromCookie as getTokenFromCookie,
+  setSessionTokenCookie,
+} from "./cookies";
+import { SessionWithUser } from "@/types/prisma";
 
-export const auth = async () => {
-  //Check session cookie
-  //Check session database
-  //Provide user to session context
+export const auth = async (
+  guest?: boolean,
+): Promise<SessionWithUser | null> => {
+  const token = await getTokenFromCookie();
+
+  if (token) {
+    const session = await validateSession(token);
+
+    if (!session) {
+      return null;
+    }
+
+    await setSessionTokenCookie(token, session.expires);
+    return session;
+  } else if (guest) {
+    const { token, session } = await signin();
+    await setSessionTokenCookie(token, session.expires);
+    return session;
+  }
+
+  redirect("/signin");
 };
 
 export const signin = async (
   credentials?: { username: string; password: string },
 ) => {
+  let userId;
+
   if (credentials) {
     const { username, password } = credentials;
 
-    let user = await prisma.users.findUnique({ where: { username: username } });
+    const user = await prisma.user.findUnique({
+      where: { username: username },
+    });
 
     if (user == null) {
       throw new Error("Wrong username or password");
@@ -24,15 +57,21 @@ export const signin = async (
       throw new Error("Wrong username or password");
     }
 
-    const token = generateSessionToken();
-    await createSession(token, user.id);
-
-    return { user, token };
+    userId = user.id;
   }
 
-  throw new Error("Not yet implemented");
+  const token = generateSessionToken();
+  const session = await createSession(token, userId);
+
+  return { session, token };
 };
 
 export const signout = async () => {
-  //remove session
+  const token = await getTokenFromCookie();
+
+  if (token) {
+    invalidateSession(token);
+  }
+
+  deleteSessionTokenCookie();
 };

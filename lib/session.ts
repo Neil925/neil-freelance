@@ -7,7 +7,7 @@ import prisma from "./prisma";
 
 const expiary = 30;
 const inDays = (days: number) =>
-  new Date(Date.now() * 1000 * 60 * 60 * 24 * days);
+  new Date(Date.now() + (1000 * 60 * 60 * 24 * days));
 const encodeToken = (token: string) =>
   encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
@@ -21,12 +21,16 @@ export const generateSessionToken = () => {
 export const createSession = async (token: string, userId?: number) => {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
-  const session = await prisma.sessions.create({
+  const exp = inDays(expiary);
+  console.log(exp);
+
+  const session = await prisma.session.create({
     data: {
-      session_id: sessionId,
-      user_id: userId,
-      expires: inDays(expiary),
+      sessionId: sessionId,
+      userId: userId ?? null,
+      expires: exp,
     },
+    include: { user: true },
   });
 
   return session;
@@ -35,8 +39,9 @@ export const createSession = async (token: string, userId?: number) => {
 export const validateSession = async (token: string) => {
   const sessionId = encodeToken(token);
 
-  let session = await prisma.sessions.findUnique({
-    where: { session_id: sessionId },
+  let session = await prisma.session.findUnique({
+    where: { sessionId: sessionId },
+    include: { user: true },
   });
 
   if (!session || !session.expires) {
@@ -44,29 +49,24 @@ export const validateSession = async (token: string) => {
   }
 
   if (session.expires && session?.expires >= inDays(expiary)) {
-    await prisma.sessions.delete({ where: { session_id: sessionId } });
+    await prisma.session.delete({ where: { sessionId: sessionId } });
     return null;
   }
 
-  session = await prisma.sessions.update({
-    where: { session_id: sessionId },
+  session = await prisma.session.update({
+    where: { sessionId: sessionId },
     data: { expires: inDays(expiary) },
+    include: { user: true },
   });
 
-  let user;
-
-  if (session.user_id) {
-    user = await prisma.users.findUnique({ where: { id: session.user_id } });
-  }
-
-  return { session, user };
+  return session;
 };
 
 export const invalidateSession = async (token: string) => {
   const sessionId = encodeToken(token);
-  await prisma.sessions.delete({ where: { session_id: sessionId } });
+  await prisma.session.delete({ where: { sessionId: sessionId } });
 };
 
 export const invalidateAllSessions = async (userId: number) => {
-  await prisma.sessions.deleteMany({ where: { user_id: userId } });
+  await prisma.session.deleteMany({ where: { userId: userId } });
 };

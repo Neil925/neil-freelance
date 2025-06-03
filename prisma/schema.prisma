@@ -8,34 +8,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model sessions {
-  session_id String   @id @db.VarChar(255)
-  user_id    Int?
-  expires    DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
+model Session {
+  sessionId String   @id @db.VarChar(255)
+  userId    Int?
+  expires   DateTime @db.Timestamp(6)
+
+  user   User?    @relation(references: [id], fields: [userId], onDelete: Cascade)
+  Ticket Ticket[]
 }
 
-model tickets {
+model Ticket {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(255)
   email       String   @db.VarChar(255)
   phone       String   @db.VarChar(255)
-  job_type    String   @db.VarChar(255)
+  jobType     String   @db.VarChar(255)
   description String   @default("")
-  created_at  DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
-  user_id     Int
-  users       users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
+  createdAt   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
+  userId      Int?
+  sessionId   String   @db.VarChar(255)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  session     Session  @relation(fields: [sessionId], references: [sessionId], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model users {
+model User {
   id       Int       @id @default(autoincrement())
   name     String    @db.VarChar(255)
   username String?   @unique @db.VarChar(255)
   password String    @db.VarChar(255)
-  role     role      @default(Guest)
-  tickets  tickets[]
+  role     Role      @default(Guest)
+  Session  Session[]
+  Ticket   Ticket[]
 }
 
-enum role {
+enum Role {
   Guest
   User
   Moderator
