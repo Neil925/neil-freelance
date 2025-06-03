@@ -3,15 +3,14 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { submitForm } from "./actions";
-// import { useSession } from "next-auth/react";
-// import logger from "@/utils/logger";
+import useAuth from "@/hooks/useAuth";
 
 export default function Ticket() {
-  // const { data: session } = useSession();
   const searchParams = useSearchParams();
 
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
+  const session = useAuth();
 
   const handleSubmit = async (x: FormData) => {
     const res = await submitForm(x);
@@ -24,23 +23,18 @@ export default function Ticket() {
     }
   };
 
-  // if (!session) {
-  //   logger.warn(
-  //     { user: null, action: "Failed Access" },
-  //     "User attempted to access a resource.",
-  //   );
-  //
-  //   return (
-  //     <div>
-  //       <h1>
-  //         No session found.
-  //         <br />
-  //         {JSON.stringify(session)}
-  //       </h1>
-  //       <a href="api/guestsignin">Attempt sign in route.</a>
-  //     </div>
-  //   );
-  // }
+  if (!session) {
+    return (
+      <div>
+        <h1>
+          No session found.
+          <br />
+          {JSON.stringify(session)}
+        </h1>
+        <a href="api/auth">Attempt sign in route.</a>
+      </div>
+    );
+  }
 
   return (
     <div className="p-5 flex justify-center flex-col space-y-8">

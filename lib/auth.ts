@@ -1,81 +1,77 @@
-import NextAuth, { DefaultSession } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { compare } from "bcryptjs";
-import { prisma } from "./prisma";
-import logger from "@/utils/logger";
+import bcrypt from "bcryptjs";
+import {
+  createSession,
+  generateSessionToken,
+  invalidateSession,
+  validateSession,
+} from "./session";
+import prisma from "./prisma";
+import { redirect } from "next/navigation";
+import {
+  deleteSessionTokenCookie,
+  getSessionTokenFromCookie as getTokenFromCookie,
+  setSessionTokenCookie,
+} from "./cookies";
+import { SessionWithUser } from "@/types/prisma";
 
-declare module "next-auth" {
-  interface Session {
-    user: {
-      role?: string | null;
-    } & DefaultSession["user"];
+export const auth = async (
+  guest?: boolean,
+): Promise<SessionWithUser | null> => {
+  const token = await getTokenFromCookie();
+
+  if (token) {
+    const session = await validateSession(token);
+
+    if (!session) {
+      return null;
+    }
+
+    await setSessionTokenCookie(token, session.expires);
+    return session;
+  } else if (guest) {
+    const { token, session } = await signin();
+    await setSessionTokenCookie(token, session.expires);
+    return session;
   }
 
-  interface User {
-    role?: string | null;
+  redirect("/signin");
+};
+
+export const signin = async (
+  credentials?: { username: string; password: string },
+) => {
+  let userId;
+
+  if (credentials) {
+    const { username, password } = credentials;
+
+    const user = await prisma.user.findUnique({
+      where: { username: username },
+    });
+
+    if (user == null) {
+      throw new Error("Wrong username or password");
+    }
+
+    if (!await bcrypt.compare(password, user.password)) {
+      throw new Error("Wrong username or password");
+    }
+
+    userId = user.id;
   }
-}
 
-export const { signIn, signOut, handlers, auth } = NextAuth({
-  providers: [
-    Credentials({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "username" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials.username || !credentials.password) {
-          logger.info(
-            { user: "Guest", action: "creation" },
-            "New guest account being created.",
-          );
-          return { id: "TestID", name: "Test Name", role: "Test role" };
-        }
+  const token = generateSessionToken();
+  const session = await createSession(token, userId);
 
-        if (
-          typeof credentials.username !== "string" ||
-          typeof credentials.password !== "string"
-        ) {
-          throw new Error("Invalid password or email.");
-        }
+  return { session, token };
+};
 
-        const user = await prisma.user.findUnique({
-          where: { username: credentials.username },
-        });
+export const signout = async () => {
+  const token = await getTokenFromCookie();
 
-        if (!user || !user.password) {
-          throw new Error("No user found.");
-        }
+  if (token) {
+    invalidateSession(token);
+  }
 
-        const isValid = compare(credentials.password, user.password);
-
-        if (!isValid) {
-          throw new Error("Invalid user or password.");
-        }
-
-        return user;
-      },
-    }),
-  ],
-  callbacks: {
-    jwt({ token, user }) {
-      if (token) {
-        token.role = user?.role;
-      }
-      return token;
-    },
-    session({ session, user }) {
-      logger.debug("Session is: ");
-      logger.debug(session);
-      if (session.user) {
-        session.user.role = user?.role;
-      }
-      return session;
-    },
-  },
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.AUTH_SECRET,
-});
+  deleteSessionTokenCookie();
+};

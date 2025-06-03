@@ -1,10 +1,10 @@
 import React from "react";
 import { Edit, Trash2 } from "@deemlol/next-icons";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 export default async function Admin() {
-  const tickets = await prisma.tickets.findMany({
-    orderBy: { created_at: "desc" },
+  const tickets = await prisma.ticket.findMany({
+    orderBy: { createdAt: "desc" },
   });
 
   return (
@@ -38,16 +38,16 @@ export default async function Admin() {
                 <td className="border-r-2 border-black p-2">{ticket.email}</td>
                 <td className="border-r-2 border-black p-2">{ticket.phone}</td>
                 <td className="border-r-2 border-black p-2">
-                  {ticket.job_type}
+                  {ticket.jobType}
                 </td>
                 <td className="border-r-2 border-black p-2">
                   {ticket.description}
                 </td>
                 <td className="border-r-2 border-black p-2">
-                  {ticket.created_at.toLocaleDateString()}
+                  {ticket.createdAt.toLocaleDateString()}
                 </td>
                 <td className="border-r-2 border-black p-2">
-                  {ticket.status}
+                  {/* {ticket.status} */}
                 </td>
                 <td className="p-2 flex space-x-2 justify-center">
                   <button className="cursor-pointer">
