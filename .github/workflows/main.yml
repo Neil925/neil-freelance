@@ -3,7 +3,7 @@ on:
     branches:
     - production
 jobs:
-  prepare:
+  delploy:
     runs-on: ubuntu-latest
     steps:
       - name: Create SSH key
