@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run reload through SSH
-        run: "ssh -i $SSH_PRIVATE_KEY dhs@direct.theneil.zone '/opt/neil-freelance/reload.sh'"
+        run: "ssh -i ${{ secrets.SSH_PRIVATE_KEY }} dhs@direct.theneil.zone '/opt/neil-freelance/reload.sh'"
