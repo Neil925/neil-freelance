@@ -1,0 +1,10 @@
+on:
+  push:
+    branches:
+    - production
+jobs:
+  ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run reload through SSH
+        run: "ssh -i $SSH_PRIVATE_KEY dhs@direct.theneil.zone '/opt/neil-freelance/reload.sh'"
