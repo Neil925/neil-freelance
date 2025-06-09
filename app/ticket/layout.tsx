@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Neil Freelance - Ticket",
@@ -13,10 +11,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider>
-      <Suspense fallback={<div>Loading...</div>}>
-        {children}
-      </Suspense>
-    </SessionProvider>
+    <div>
+      {children}
+    </div>
   );
 }

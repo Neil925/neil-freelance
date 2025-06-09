@@ -1,127 +1,85 @@
-"use client";
+import TicketForm from "./components/ticketForm";
+import prisma from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { Edit, Trash2 } from "@deemlol/next-icons";
 
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { submitForm } from "./actions";
-import useAuth from "@/hooks/useAuth";
-
-export default function Ticket() {
-  const searchParams = useSearchParams();
-
-  const [message, setMessage] = useState("");
-  const [success, setSuccess] = useState(false);
-  const session = useAuth();
-
-  const handleSubmit = async (x: FormData) => {
-    const res = await submitForm(x);
-
-    setMessage(res.message);
-    setSuccess(res.success);
-
-    if (res.success) {
-      setTimeout(() => setMessage(""), 5000);
-    }
-  };
+export default async function Ticket() {
+  const session = await auth(true, true);
 
   if (!session) {
     return (
-      <div>
-        <h1>
-          No session found.
-          <br />
-          {JSON.stringify(session)}
-        </h1>
-        <a href="api/auth">Attempt sign in route.</a>
+      <div className="w-screen h-screen flex flex-col justify-center items-center space-y-3 text-xl">
+        <h1 className="font-bold text-red-700 text-7xl">Warning</h1>
+        <p className="">
+          No session data found. Please reload or reach out to me directly.
+        </p>
+        <a href="/">
+          <button className="p-2 bg-primary rounded-md cursor-pointer">
+            <b>Go Back</b>
+          </button>
+        </a>
       </div>
     );
   }
 
+  const tickets = await prisma.ticket.findMany({
+    where: { sessionId: session.sessionId },
+    orderBy: { createdAt: "desc" },
+  });
+
   return (
-    <div className="p-5 flex justify-center flex-col space-y-8">
-      <div className="text-center space-y-5">
-        <h1 className="text-5xl font-bold">Submit a Ticket</h1>
-        <p>
-          Give me some details on the job and I will reach out to you as soon as
-          I am available!
-        </p>
+    <div className="h-screen flex flex-col lg:flex-row">
+      <TicketForm />
+      <div className="w-full lg:w-2/3 flex flex-col p-2">
+        <h2 className="font-bold text-2xl md:text-4xl">
+          Tickets
+        </h2>
+        <table className="bg-primary border-collapse rounded-md drop-shadow-black drop-shadow-sm">
+          <thead className="font-bold">
+            <tr className="border-b-2 border-black rounded-t-md">
+              <td className="border-r-2 border-black p-2 rounded-tl-md">ID</td>
+              <td className="border-r-2 border-black p-2">Name</td>
+              <td className="border-r-2 border-black p-2">Email</td>
+              <td className="border-r-2 border-black p-2">Phone</td>
+              <td className="border-r-2 border-black p-2">Job Type</td>
+              <td className="border-r-2 border-black p-2">Description</td>
+              <td className="border-r-2 border-black p-2">Created At</td>
+              <td className="border-r-2 border-black p-2">Status</td>
+              <td className="p-2">Actions</td>
+            </tr>
+          </thead>
+          <tbody>
+            {tickets.map((ticket) => (
+              <tr key={ticket.id} className="border-t-2 border-black">
+                <td className="border-r-2 border-black p-2">{ticket.id}</td>
+                <td className="border-r-2 border-black p-2">{ticket.name}</td>
+                <td className="border-r-2 border-black p-2">{ticket.email}</td>
+                <td className="border-r-2 border-black p-2">{ticket.phone}</td>
+                <td className="border-r-2 border-black p-2">
+                  {ticket.jobType}
+                </td>
+                <td className="border-r-2 border-black p-2">
+                  {ticket.description}
+                </td>
+                <td className="border-r-2 border-black p-2">
+                  {ticket.createdAt.toLocaleDateString()}
+                </td>
+                <td className="border-r-2 border-black p-2">
+                  {/* {ticket.status} */}
+                </td>
+                <td className="p-2 flex space-x-2 justify-center font-bold">
+                  <button className="cursor-pointer font-bold">
+                    <Edit />
+                  </button>
+                  <button>
+                    <Trash2 className="cursor-pointer" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      {message !== "" &&
-        (
-          <p
-            className={`${success ? "text-green-700" : "text-red-700"
-              } font-bold text-center text-2xl`}
-          >
-            {success ? "" : "Error: "}
-            {message}
-          </p>
-        )}
-      <form
-        className="lg:w-1/3 w-full flex flex-col mx-auto border-1 bg-primary-tr p-2 drop-shadow-sm
-        space-y-5"
-        action={handleSubmit}
-      >
-        <div className="flex flex-col">
-          <label className="text-lg font-bold">Name</label>
-          <input
-            className="border-1 rounded-sm bg-white p-[3px]"
-            type="text"
-            name="name"
-            required
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-lg font-bold">Email</label>
-          <input
-            className="border-1 rounded-sm bg-white p-[3px]"
-            type="email"
-            name="email"
-            required
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-lg font-bold">Phone</label>
-          <input
-            className="border-1 rounded-sm bg-white p-[3px]"
-            type="text"
-            name="phone"
-            required
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-lg font-bold">Job Type</label>
-          <select
-            className="border-1 rounded-sm bg-white p-[3px]"
-            name="job-type"
-            id="job-type"
-            defaultValue={searchParams.get("job-type") ?? ""}
-            required
-          >
-            <option value="" disabled>--</option>
-            <option value={"ITSupport"}>IT Support</option>
-            <option value={"WebDevelopment"}>Web Development</option>
-            <option value={"SoftwareDevelopment"}>Software Development</option>
-            <option value={"Other"}>Other</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-lg font-bold">Description</label>
-          <textarea
-            className="border-1 rounded-sm bg-white h-24 p-[3px]"
-            name="description"
-            required
-          />
-        </div>
-
-        <div className="w-full flex justify-end ">
-          <button className="w-fit p-2 border-1 bg-primary rounded text-lg font-bold cursor-pointer">
-            Submit Ticket
-          </button>
-        </div>
-      </form>
     </div>
   );
 }
