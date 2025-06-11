@@ -19,10 +19,9 @@ export const generateSessionToken = () => {
 };
 
 export const createSession = async (token: string, userId?: number) => {
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  const sessionId = encodeToken(token);
 
   const exp = inDays(expiary);
-  console.log(exp);
 
   const session = await prisma.session.create({
     data: {

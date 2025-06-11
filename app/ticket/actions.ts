@@ -8,7 +8,7 @@ export async function submitForm(formData: FormData) {
     return { success: false, message: "No webhook URL found." };
   }
 
-  const session = await auth();
+  const session = await auth(true);
 
   if (!session) {
     return { success: false, message: "Could not create a user session." };

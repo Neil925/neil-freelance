@@ -6,7 +6,7 @@ import {
   validateSession,
 } from "./session";
 import prisma from "./prisma";
-import { redirect } from "next/navigation";
+
 import {
   deleteSessionTokenCookie,
   getSessionTokenFromCookie as getTokenFromCookie,
@@ -15,26 +15,29 @@ import {
 import { SessionWithUser } from "@/types/prisma";
 
 export const auth = async (
-  guest?: boolean,
+  canWriteCookie?: boolean,
 ): Promise<SessionWithUser | null> => {
-  const token = await getTokenFromCookie();
+  const cookieToken = await getTokenFromCookie();
 
-  if (token) {
-    const session = await validateSession(token);
-
-    if (!session) {
-      return null;
-    }
-
-    await setSessionTokenCookie(token, session.expires);
-    return session;
-  } else if (guest) {
+  if (!cookieToken && !canWriteCookie) {
+    return null;
+  } else if (!cookieToken) {
     const { token, session } = await signin();
     await setSessionTokenCookie(token, session.expires);
     return session;
   }
 
-  redirect("/signin");
+  const session = await validateSession(cookieToken);
+
+  if (!session) {
+    return null;
+  }
+
+  if (canWriteCookie) {
+    await setSessionTokenCookie(cookieToken, session.expires);
+  }
+
+  return session;
 };
 
 export const signin = async (
