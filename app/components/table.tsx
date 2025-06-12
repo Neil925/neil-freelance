@@ -1,22 +1,22 @@
-import { MouseEventHandler, ReactElement } from "react";
+import { ForwardRefExoticComponent, MouseEventHandler } from "react";
 
-interface props {
+interface Props {
   data: any[];
-  tableHeaders: string[];
+  fieldHeaders: string[];
   headerColor: string;
   primaryColor: string;
   secondaryColor: string;
   minLength?: number;
   actions?: {
-    el: ReactElement<any>;
+    el: ForwardRefExoticComponent<any>;
     action: MouseEventHandler<HTMLButtonElement>;
   }[];
 }
 
-export const Table = (props: props) => {
+export const Table = (props: Props) => {
   const {
     data,
-    tableHeaders: fieldHeaders,
+    fieldHeaders,
     headerColor,
     primaryColor,
     secondaryColor,
@@ -24,7 +24,10 @@ export const Table = (props: props) => {
     actions,
   } = props;
 
-  const dataKeys = Object.keys(data);
+  const dataKeys = Object.keys(data[0]);
+
+  console.log(data);
+  console.log(dataKeys);
 
   if (minLength) {
     const toAdd = data.length - minLength;
@@ -50,18 +53,19 @@ export const Table = (props: props) => {
           {data.map((item, key) => (
             <tr
               key={key}
-              className={`p-2 h-12 ${(key % 2 == 1
+              className={`p-2 h-12 ${(key % 2 == 0
                 ? primaryColor
                 : secondaryColor)}`}
             >
               {dataKeys.map((itemKey, k) => (
-                <td className="p-2">{item[itemKey]}</td>
+                <td className="p-2" key={k}>{item[itemKey]}</td>
               ))}
               {actions && item[dataKeys[0]] && (
                 <td className="">
                   <div className="p-2 flex justify-around w-full">
                     {actions.map((act, k) => (
                       <button
+                        key={k}
                         className="cursor-pointer font-bold"
                         onClick={act.action}
                       >

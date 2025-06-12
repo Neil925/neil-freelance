@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { Edit, Trash2 } from "@deemlol/next-icons";
 import Link from "next/link";
-import { Ticket } from "@prisma/client";
+import { Table } from "../components/table";
 
 export default async function TicketPage() {
   const session = await auth();
@@ -29,10 +29,15 @@ export default async function TicketPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  const moreNeeded = 10 - tickets.length;
-  for (let i = 0; i < moreNeeded; i++) {
-    tickets.push({} as Ticket);
-  }
+  const data = tickets.map((x) => (
+    {
+      id: x.id,
+      jobType: x.jobType,
+      createdAt: x.createdAt.toLocaleDateString(),
+      description: x.description,
+    }
+  ));
+  const fieldHeaders = ["ID", "Job Type", "Created At", "Description"];
 
   return (
     <div className="h-screen flex flex-col lg:flex-row">
@@ -42,6 +47,14 @@ export default async function TicketPage() {
           <h2 className="font-bold text-2xl md:text-4xl">
             Tickets
           </h2>
+          <Table
+            data={data}
+            fieldHeaders={fieldHeaders}
+            headerColor="bg-primary"
+            primaryColor="bg-gray-100"
+            secondaryColor="bg-gray-300"
+            minLength={10}
+          />
         </div>
       </div>
     </div>
