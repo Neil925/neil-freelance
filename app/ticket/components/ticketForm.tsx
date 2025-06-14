@@ -21,15 +21,14 @@ export default function TicketForm() {
 
   return (
     <form
-      className="lg:w-1/3 w-full flex flex-col bg-primary-tr p-2 space-y-5 h-full"
+      className="lg:w-1/3 w-full flex flex-col bg-primary lg:bg-primary-tr p-2 space-y-5 h-full"
       action={handleSubmit}
     >
       {message !== "" &&
         (
           <p
-            className={`${
-              success ? "text-green-700" : "text-red-700"
-            } font-bold text-center text-2xl`}
+            className={`${success ? "text-green-700" : "text-red-700"
+              } font-bold text-center text-2xl`}
           >
             {success ? "" : "Error: "}
             {message}

@@ -2,6 +2,14 @@
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { Ticket } from "@prisma/client";
+
+export async function cancelTicket(ticket: Ticket) {
+  await prisma.ticket.update({
+    where: { id: ticket.id },
+    data: { status: "Cancelled" },
+  });
+}
 
 export async function submitForm(formData: FormData) {
   if (process.env.WEBHOOK_URL == undefined) {

@@ -1,4 +1,4 @@
-import { ForwardRefExoticComponent, MouseEventHandler } from "react";
+"use client";
 
 interface Props {
   data: any[];
@@ -7,13 +7,9 @@ interface Props {
   primaryColor: string;
   secondaryColor: string;
   minLength?: number;
-  actions?: {
-    el: ForwardRefExoticComponent<any>;
-    action: MouseEventHandler<HTMLButtonElement>;
-  }[];
 }
 
-export const Table = (props: Props) => {
+export function Table(props: Props) {
   const {
     data,
     fieldHeaders,
@@ -21,21 +17,32 @@ export const Table = (props: Props) => {
     primaryColor,
     secondaryColor,
     minLength,
-    actions,
   } = props;
 
-  const dataKeys = Object.keys(data[0]);
+  let dataKeys: string[] = [];
 
-  console.log(data);
-  console.log(dataKeys);
+  for (let i = 0; i < fieldHeaders.length; i++) {
+    dataKeys.push(`holder${i}`);
+  }
+
+  if (data[0]) {
+    dataKeys = Object.keys(data[0]);
+  }
 
   if (minLength) {
-    const toAdd = data.length - minLength;
+    const toAdd = minLength - data.length;
 
     for (let i = 0; i < toAdd; i++) {
-      data.push({});
+      const obj: any = {};
+      for (let j = 0; j < dataKeys.length; j++) {
+        const el = dataKeys[j];
+        obj[el] = " ";
+      }
+      data.push(obj);
     }
   }
+
+  console.log(data);
 
   return (
     <div className="rounded-md overflow-auto drop-shadow-sm drop-shadow-black">
@@ -60,25 +67,10 @@ export const Table = (props: Props) => {
               {dataKeys.map((itemKey, k) => (
                 <td className="p-2" key={k}>{item[itemKey]}</td>
               ))}
-              {actions && item[dataKeys[0]] && (
-                <td className="">
-                  <div className="p-2 flex justify-around w-full">
-                    {actions.map((act, k) => (
-                      <button
-                        key={k}
-                        className="cursor-pointer font-bold"
-                        onClick={act.action}
-                      >
-                        <act.el />
-                      </button>
-                    ))}
-                  </div>
-                </td>
-              )}
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-};
+}

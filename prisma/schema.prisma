@@ -18,17 +18,18 @@ model Session {
 }
 
 model Ticket {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(255)
-  email       String   @db.VarChar(255)
-  phone       String   @db.VarChar(255)
-  jobType     String   @db.VarChar(255)
-  description String   @default("")
-  createdAt   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
+  id          Int          @id @default(autoincrement())
+  name        String       @db.VarChar(255)
+  email       String       @db.VarChar(255)
+  phone       String       @db.VarChar(255)
+  jobType     String       @db.VarChar(255)
+  description String       @default("")
+  createdAt   DateTime     @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
+  status      TicketStatus @default(Sent)
   userId      Int?
-  sessionId   String   @db.VarChar(255)
-  user        User?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  session     Session  @relation(fields: [sessionId], references: [sessionId], onDelete: NoAction, onUpdate: NoAction)
+  sessionId   String       @db.VarChar(255)
+  user        User?        @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  session     Session      @relation(fields: [sessionId], references: [sessionId], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model User {
@@ -46,4 +47,13 @@ enum Role {
   User
   Moderator
   Admin
+}
+
+enum TicketStatus {
+  Sent
+  Contacted
+  Accepted
+  Completed
+  Rejected
+  Cancelled
 }
