@@ -42,8 +42,6 @@ export function Table(props: Props) {
     }
   }
 
-  console.log(data);
-
   return (
     <div className="rounded-md overflow-auto drop-shadow-sm drop-shadow-black">
       <table className="w-full table-auto">
